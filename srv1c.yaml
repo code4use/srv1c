@@ -1,0 +1,47 @@
+---
+#
+- hosts: servers1c
+  remote_user: root
+
+  tasks:
+      - name: Epel
+        yum:
+            name: epel-release
+            state: present
+
+      - name: Install packages
+        yum:
+            name: 
+                - wget
+                - qemu-guest-agent
+                - fontconfig-devel
+                - ImageMagick
+                - ttf2pt1
+                - rpm-build
+                - cabextract
+                - ttmkfdir
+                - httpd
+                - mc
+            state: present
+
+      - name: Install msttcorefonts
+        yum:
+            name: http://repo.openfusion.net/centos7-x86_64//msttcorefonts-2.1-1.of.el7.noarch.rpm
+            state: present
+
+      - name: Install hasp
+        yum:
+            name: http://download.etersoft.ru/pub/Etersoft/HASP/last/CentOS/7/haspd-7.90-eter2centos.x86_64.rpm
+            state: present
+
+      - name: Copy srv1c rpm files
+        copy:
+                src: ./srv1c
+                dest: /tmp/
+
+      - name: Install 1c server rpms
+        shell: 
+                yum localinstall -y /tmp/srv1c/1*rpm
+
+...
+
